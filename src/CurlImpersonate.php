@@ -9,33 +9,42 @@ class CurlImpersonate {
     private $data;
     private $includeHeaders = false; 
     private $engineCurl = "curl"; 
+    private $sslVerifyPeer = true; 
+    private $sslVerifyHost = true; 
+    private $engineCurl = "curl"; 
     private $handle;
 
     public function setopt($option, $value) {
         switch ($option) {
-            case CURLCMDOPT_URL:
+            case CURL_URL:
                 $this->url = $value;
                 break;
-            case CURLCMDOPT_METHOD:
+            case CURL_METHOD:
                 $this->method = strtoupper($value);
                 break;
-            case CURLCMDOPT_POSTFIELDS:
+            case CURL_POSTFIELDS:
                 $this->data = $value;
                 break;
-            case CURLCMDOPT_HTTP_HEADERS:
+            case CURL_HEADERS:
                 $this->headers = array_merge($this->headers, $value);
                 break;
-            case CURLCMDOPT_HEADER:
+            case CURL_INCLUDE_HEADERS:
                 $this->includeHeaders = (bool)$value;
                 break;
-            case CURLCMDOPT_ENGINE:
+            case CURL_ENGINE:
                 $this->engineCurl = $value;
                 break;
-            case CURLCMDOPT_COOKIEFILE:
+            case CURL_COOKIEFILE:
                 $this->cookieFile = $value;
                 break;
-            case CURLCMDOPT_COOKIEJAR:
+            case CURL_COOKIEJAR:
                 $this->cookieJar = $value;
+                break;
+            case CURL_SSL_VERIFYPEER:
+                $this->sslVerifyPeer = $value;
+                break;
+            case CURL_SSL_VERIFYHOST:
+                $this->sslVerifyHost = $value;
                 break;
             default:
                 throw new \InvalidArgumentException("Invalid option: {$option}");
@@ -72,6 +81,10 @@ class CurlImpersonate {
 
         if ($this->includeHeaders) {
             $curlCommand .= ' -i';
+        }
+
+        if (!$this->sslVerifyPeer || !$this->sslVerifyHost) {
+            $curlCommand .= ' -k';
         }
 
         $curlCommand .= ' ' . escapeshellarg($this->url);
@@ -128,11 +141,13 @@ class CurlImpersonate {
 }
 
 
-define('CURLCMDOPT_URL', 1);
-define('CURLCMDOPT_METHOD', 2);
-define('CURLCMDOPT_POSTFIELDS', 3);
-define('CURLCMDOPT_HTTP_HEADERS', 4);
-define('CURLCMDOPT_HEADER', 5);
-define('CURLCMDOPT_ENGINE', 6);
-define('CURLCMDOPT_COOKIEFILE', 7);
-define('CURLCMDOPT_COOKIEJAR', 8);
+define('CURL_URL', 1);
+define('CURL_METHOD', 2);
+define('CURL_POSTFIELDS', 3);
+define('CURL_HEADERS', 4);
+define('CURL_INCLUDE_HEADERS', 5);
+define('CURL_ENGINE', 6);
+define('CURL_COOKIEFILE', 7);
+define('CURL_COOKIEJAR', 8);
+define('CURL_SSL_VERIFYHOST', 9);
+define('CURL_SSL_VERIFYPEER', 10);
