@@ -1,6 +1,7 @@
 <?php
 namespace CurlImpersonate;
 class CurlImpersonate {
+    private $engineCurl = "curl"; 
     private $url;
     private $method = 'GET';
     private $headers = array();
@@ -8,10 +9,8 @@ class CurlImpersonate {
     private $cookieJar;
     private $data;
     private $includeHeaders = false; 
-    private $engineCurl = "curl"; 
     private $sslVerifyPeer = true; 
     private $sslVerifyHost = true; 
-    private $engineCurl = "curl"; 
     private $handle;
 
     public function setopt($option, $value) {
