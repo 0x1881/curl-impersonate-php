@@ -158,4 +158,4 @@ define('CURL_COOKIEFILE', 7);
 define('CURL_COOKIEJAR', 8);
 define('CURL_SSL_VERIFYHOST', 9);
 define('CURL_SSL_VERIFYPEER', 10);
-define('CURL_SSL_VERBOSE', 11);
+define('CURL_VERBOSE', 11);
