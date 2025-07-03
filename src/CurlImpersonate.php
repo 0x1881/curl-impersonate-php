@@ -11,6 +11,7 @@ class CurlImpersonate {
     private $includeHeaders = false; 
     private $sslVerifyPeer = true; 
     private $sslVerifyHost = true; 
+    private $verbose = false; 
     private $handle;
 
     public function setopt($option, $value) {
@@ -44,6 +45,9 @@ class CurlImpersonate {
                 break;
             case CURL_SSL_VERIFYHOST:
                 $this->sslVerifyHost = $value;
+                break;
+            case CURL_VERBOSE:
+                $this->verbose = $value;
                 break;
             default:
                 throw new \InvalidArgumentException("Invalid option: {$option}");
@@ -84,6 +88,10 @@ class CurlImpersonate {
 
         if (!$this->sslVerifyPeer || !$this->sslVerifyHost) {
             $curlCommand .= ' -k';
+        }
+
+        if ($this->verbose) {
+            $curlCommand .= ' -v';
         }
 
         $curlCommand .= ' ' . escapeshellarg($this->url);
@@ -150,3 +158,4 @@ define('CURL_COOKIEFILE', 7);
 define('CURL_COOKIEJAR', 8);
 define('CURL_SSL_VERIFYHOST', 9);
 define('CURL_SSL_VERIFYPEER', 10);
+define('CURL_SSL_VERBOSE', 11);
